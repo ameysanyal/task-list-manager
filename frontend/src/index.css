@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tabulator .tabulator-header {
+  background-color: white !important;
+  color: black !important;
+}
+/*
+.tabulator .tabulator-row {
+  background-color: #c3bae6;
+}
+
+.tabulator .tabulator-row:nth-child(even) {
+  background-color: #c3bae6;
+} */
