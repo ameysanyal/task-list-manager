@@ -1,62 +1,82 @@
 import { createContext, useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const TaskContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const TaskProvider = ({ children }) => {
     const [tasks, setTasks] = useState([]);
-
-    const [doneCount, setDoneCount] = useState()
-    const [toDoCount, setTodoCount] = useState()
+    const [doneCount, setDoneCount] = useState(0);
+    const [toDoCount, setTodoCount] = useState(0);
 
     const fetchTasks = async () => {
-        const response = await fetch('http://localhost:5000/tasks');
-        const data = await response.json();
-        setTasks(data);
-        setDoneCount()
+        try {
+            const response = await fetch('http://localhost:5000/tasks');
+            if (!response.ok) throw new Error("Failed to fetch tasks");
+            const data = await response.json();
+            setTasks(data);
+        } catch (error) {
+            toast.error("Failed to fetch tasks", error);
+        }
     };
 
     useEffect(() => {
-        const doneTodos = tasks.filter((item) => {
-            return item.completed === true
-        })
-        setDoneCount(doneTodos.length)
-        const inProgress = tasks.filter((item) => {
-            return item.completed === false
-        })
-        setTodoCount(inProgress.length)
-
-
-    }, [tasks])
+        const doneTodos = tasks.filter((item) => item.completed === true);
+        setDoneCount(doneTodos.length);
+        const inProgress = tasks.filter((item) => item.completed === false);
+        setTodoCount(inProgress.length);
+    }, [tasks]);
 
     const addTask = async (task) => {
-        const response = await fetch('http://localhost:5000/tasks', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(task),
-        });
-        const newTask = await response.json();
-        setTasks((prev) => [...prev, newTask]);
+        try {
+            const response = await fetch('http://localhost:5000/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(task),
+            });
+            if (!response.ok) throw new Error("Failed to add task");
+            const newTask = await response.json();
+            setTasks((prev) => [...prev, newTask]);
+            toast.success("New Task Added Successfully");
+        } catch (error) {
+            toast.error("Failed to add task", error);
+        }
     };
 
-    const updateTask = async (id, updatedTask) => {
-        console.log(`Id is ${id} and updatedTask is ${updatedTask}`)
-        await fetch(`http://localhost:5000/tasks/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedTask),
-        });
-        fetchTasks();
+    const updateTask = async (id, data) => {
+        try {
+            await fetch(`http://localhost:5000/tasks/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+            setTasks((prev) =>
+                prev.map((task) => (task.id === id ? { ...task, ...data } : task))
+            );
+            toast.info(`Task id:${id} Edited Successfully `);
+        } catch (error) {
+            toast.error("Failed to edit task", error);
+        }
     };
 
     const deleteTask = async (id) => {
-        await fetch(`http://localhost:5000/tasks/${id}`, { method: 'DELETE' });
-        fetchTasks();
+        try {
+            await fetch(`http://localhost:5000/tasks/${id}`, { method: 'DELETE' });
+            setTasks((prev) => prev.filter((task) => task.id !== id));
+            toast.info(`Task id:${id} Deleted Successfully`);
+        } catch (error) {
+            toast.error("Failed to delete task", error);
+        }
     };
 
     return (
-        <TaskContext.Provider value={{ tasks, fetchTasks, addTask, updateTask, deleteTask, doneCount, toDoCount }}>
-            {children}
-        </TaskContext.Provider>
+        <>
+            <TaskContext.Provider value={{ tasks, fetchTasks, addTask, updateTask, deleteTask, doneCount, toDoCount }}>
+                {children}
+            </TaskContext.Provider>
+            <ToastContainer position="bottom-left" autoClose={3000} />
+        </>
     );
 };
-
