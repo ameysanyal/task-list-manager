@@ -76,8 +76,6 @@ const TaskTable = () => {
             },
             mutator: (value, data, type) => {
                 if (type === "edit") {
-                    console.log("Edited cell:", value);
-                    console.log(data.id)
                     updateTask(data.id, { "completed": value });
                 }
                 return value;
@@ -106,3 +104,8 @@ const TaskTable = () => {
 };
 
 export default TaskTable;
+
+
+// mutator: it is function that is called before the cell value is updated
+//formatter: function for styling cell content
+//headerFilterFunc: for adding filtering logic

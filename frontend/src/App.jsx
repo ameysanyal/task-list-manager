@@ -4,6 +4,9 @@ import AddTaskForm from './components/AddTaskForm';
 import { TaskContext } from './context/TaskContext';
 import { useContext } from 'react';
 
+
+
+// TaskStats component displays completed and in progress tasks
 const TaskStats = () => {
   const { doneCount, toDoCount } = useContext(TaskContext);
 

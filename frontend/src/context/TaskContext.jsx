@@ -10,10 +10,17 @@ export const TaskContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const TaskProvider = ({ children }) => {
+
+    // tasks state is for total tasks
+    // doneCount state is for completed tasks
+    // toDoCount state is for tasks in progress
+
     const [tasks, setTasks] = useState([]);
     const [doneCount, setDoneCount] = useState(0);
     const [toDoCount, setTodoCount] = useState(0);
 
+
+    // Get request for fetching all tasks
     const fetchTasks = async () => {
         try {
             const response = await fetch(`${backendUrl}/tasks`);
@@ -25,6 +32,7 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    // calculating completed task and tasks in progress
     useEffect(() => {
         const doneTodos = tasks.filter((item) => item.completed === true);
         setDoneCount(doneTodos.length);
@@ -32,6 +40,8 @@ export const TaskProvider = ({ children }) => {
         setTodoCount(inProgress.length);
     }, [tasks]);
 
+
+    // POST request for adding a new task
     const addTask = async (task) => {
         try {
             const response = await fetch(`${backendUrl}/tasks`, {
@@ -48,6 +58,7 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    // PUT request for editing task title and status
     const updateTask = async (id, data) => {
         try {
             await fetch(`${backendUrl}/tasks/${id}`, {
@@ -64,6 +75,7 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    // DELETE request for deleting a task
     const deleteTask = async (id) => {
         try {
             await fetch(`${backendUrl}/tasks/${id}`, { method: 'DELETE' });
