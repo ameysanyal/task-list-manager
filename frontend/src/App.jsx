@@ -3,8 +3,6 @@ import TaskTable from './components/TaskTable';
 import AddTaskForm from './components/AddTaskForm';
 import { TaskContext } from './context/TaskContext';
 import { useContext } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const TaskStats = () => {
   const { doneCount, toDoCount } = useContext(TaskContext);

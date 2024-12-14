@@ -8,7 +8,6 @@ import { TaskContext } from '../context/TaskContext';
 const TaskTable = () => {
     const { tasks, fetchTasks, updateTask, deleteTask } = useContext(TaskContext);
 
-
     useEffect(() => {
         fetchTasks();
     }, []);
@@ -64,16 +63,16 @@ const TaskTable = () => {
             headerFilterParams: {
                 values: [
                     { label: 'All', value: '' },
-                    { label: 'Done', value: true },
-                    { label: 'To Do', value: false }
+                    { label: 'Done', value: 'true' },
+                    { label: 'To Do', value: 'false' }
                 ]
             },
             headerFilterPlaceholder: "Filter Status",
             headerFilterFunc: (headerValue, rowValue) => {
-                if (headerValue === '') {
+                if (headerValue == '') {
                     return true;
                 }
-                return rowValue === headerValue;
+                return String(rowValue) === headerValue;
             },
             mutator: (value, data, type) => {
                 if (type === "edit") {
@@ -99,9 +98,7 @@ const TaskTable = () => {
                 data={tasks}
                 columns={columns}
                 layout="fitData"
-                options={{
-                    height: '500px'
-                }}
+                className="tabulator-container"
             />
 
         </div>

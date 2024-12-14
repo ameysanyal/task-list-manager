@@ -1,6 +1,9 @@
 import { createContext, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import config from '../../config.js';
+
+const backendUrl = config.backendUrl;
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const TaskContext = createContext();
@@ -13,7 +16,7 @@ export const TaskProvider = ({ children }) => {
 
     const fetchTasks = async () => {
         try {
-            const response = await fetch('http://localhost:5000/tasks');
+            const response = await fetch(`${backendUrl}/tasks`);
             if (!response.ok) throw new Error("Failed to fetch tasks");
             const data = await response.json();
             setTasks(data);
@@ -31,7 +34,7 @@ export const TaskProvider = ({ children }) => {
 
     const addTask = async (task) => {
         try {
-            const response = await fetch('http://localhost:5000/tasks', {
+            const response = await fetch(`${backendUrl}/tasks`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(task),
@@ -47,7 +50,7 @@ export const TaskProvider = ({ children }) => {
 
     const updateTask = async (id, data) => {
         try {
-            await fetch(`http://localhost:5000/tasks/${id}`, {
+            await fetch(`${backendUrl}/tasks/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
@@ -63,7 +66,7 @@ export const TaskProvider = ({ children }) => {
 
     const deleteTask = async (id) => {
         try {
-            await fetch(`http://localhost:5000/tasks/${id}`, { method: 'DELETE' });
+            await fetch(`${backendUrl}/tasks/${id}`, { method: 'DELETE' });
             setTasks((prev) => prev.filter((task) => task.id !== id));
             toast.info(`Task id:${id} Deleted Successfully`);
         } catch (error) {

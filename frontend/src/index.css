@@ -6,11 +6,19 @@
   background-color: white !important;
   color: black !important;
 }
-/*
-.tabulator .tabulator-row {
-  background-color: #c3bae6;
+
+.tabulator-container {
+  height: 500px;
 }
 
-.tabulator .tabulator-row:nth-child(even) {
-  background-color: #c3bae6;
-} */
+@media (max-width: 768px) {
+  .tabulator-container {
+    height: 440px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabulator-container {
+    height: 400px;
+  }
+}

@@ -20,12 +20,6 @@ const AddTaskForm = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 className='p-1 outline-none w-72'
             />
-            {/* <textarea
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                type="textarea"
-            /> */}
             <button type="submit" className="text-white bg-blue-500 py-1 hover:bg-blue-600 px-2">
                 Add Task
             </button>
